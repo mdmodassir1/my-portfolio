@@ -34,48 +34,98 @@ function App() {
     }
   };
 
-  // Contact form submission handler
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitStatus(null);
+  // Contact form submission handler - UPDATED WITH BETTER ERROR HANDLING
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setIsSubmitting(true);
+  setSubmitStatus(null);
 
-    try {
-      const response = await fetch('http://localhost:5000/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+  // Basic validation
+  if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+    setSubmitStatus({
+      type: 'error',
+      message: 'Please fill in all fields'
+    });
+    setIsSubmitting(false);
+    return;
+  }
 
-      const data = await response.json();
+  // Email validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(formData.email)) {
+    setSubmitStatus({
+      type: 'error',
+      message: 'Please enter a valid email address'
+    });
+    setIsSubmitting(false);
+    return;
+  }
 
-      if (data.success) {
-        setSubmitStatus({
-          type: 'success',
-          message: 'Thank you! Your message has been sent successfully.'
-        });
-        // Reset form
-        setFormData({
-          name: '',
-          email: '',
-          subject: '',
-          message: ''
-        });
-      } else {
-        throw new Error(data.message);
-      }
-    } catch (error) {
-      console.error('Contact form error:', error);
-      setSubmitStatus({
-        type: 'error',
-        message: error.message || 'Something went wrong. Please try again.'
-      });
-    } finally {
-      setIsSubmitting(false);
+  try {
+    console.log('📤 Sending form data:', formData); // Debug log
+
+    const response = await fetch('http://localhost:5000/api/contact', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+
+    // Check if response is OK
+    if (!response.ok) {
+      throw new Error(`Server responded with status: ${response.status}`);
     }
-  };
+
+    // Check if response is JSON
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Server returned non-JSON response');
+    }
+
+    const data = await response.json();
+
+    if (data.success) {
+      setSubmitStatus({
+        type: 'success',
+        message: 'Thank you! Your message has been sent successfully. I\'ll get back to you soon!'
+      });
+      
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        subject: '',
+        message: ''
+      });
+    } else {
+      throw new Error(data.message || 'Failed to send message');
+    }
+    
+  } catch (error) {
+    console.error('❌ Contact form error:', error);
+    
+    // User-friendly error message
+    let errorMessage = 'Failed to send message. ';
+    
+    if (error.message.includes('Failed to fetch')) {
+      errorMessage += 'Cannot connect to server. Please make sure backend is running on port 5000.';
+    } else if (error.message.includes('non-JSON')) {
+      errorMessage += 'Server error. Please try again later.';
+    } else if (error.message.includes('status:')) {
+      errorMessage += 'Server is not responding properly.';
+    } else {
+      errorMessage += error.message || 'Please try again.';
+    }
+    
+    setSubmitStatus({
+      type: 'error',
+      message: errorMessage
+    });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   // Intersection Observer for animations
   useEffect(() => {
@@ -120,7 +170,7 @@ function App() {
       {/* Animated Background */}
       <div className="animated-bg"></div>
 
-      {/* Navigation Bar */}
+      {/* Navigation Bar - FIXED RESUME BUTTON */}
       <nav className="navbar glass">
         <div className="container">
           <div className="nav-brand">
@@ -161,6 +211,22 @@ function App() {
             >
               Projects
             </button>
+            
+            {/* FIXED RESUME BUTTON - Page reload nahi hoga */}
+            <button 
+              className="resume-nav-btn"
+              onClick={(e) => {
+                e.preventDefault();  // Page reload roktahai
+                e.stopPropagation(); // Event bubbling rokta hai
+                window.open('/resume.pdf.pdf', '_blank');
+                return false;        // Extra safety
+              }}
+              type="button"
+            >
+              <span className="btn-text">📄 Resume</span>
+              <span className="btn-icon">⬇️</span>
+            </button>
+            
             <button 
               className={activeSection === 'contact' ? 'nav-link active' : 'nav-link'} 
               onClick={() => scrollToSection('contact')}
@@ -731,6 +797,150 @@ function App() {
         </div>
       </section>
 
+      {/* ===== RESUME SECTION ===== */}
+      <section id="resume" className="resume-section-3d" ref={setRef('resume')}>
+        <div className="resume-particles">
+          {[...Array(15)].map((_, i) => (
+            <div key={i} className="particle" style={{
+              left: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 3}s`,
+              animationDuration: `${4 + Math.random() * 6}s`
+            }}></div>
+          ))}
+        </div>
+        
+        <div className="container">
+          <div className="section-header-3d">
+            <div className="section-badge">05</div>
+            <h2 className="section-title-3d">Professional Resume</h2>
+            <div className="section-subtitle-3d">My qualifications and experience at a glance</div>
+          </div>
+          
+          <div className="resume-content-3d">
+            {/* Resume Preview Card */}
+            <div className="resume-preview-card glass">
+              <div className="resume-preview-header">
+                <div className="resume-icon">📄</div>
+                <h3>Md Modassir - Full Stack Developer</h3>
+                <p>Updated: March 2026</p>
+              </div>
+              
+              <div className="resume-preview-body">
+                <div className="resume-highlights">
+                  <div className="highlight-item">
+                    <span className="highlight-icon">🎓</span>
+                    <div className="highlight-text">
+                      <strong>Education</strong>
+                      <p>B.Tech Computer Science (2022-2026)</p>
+                    </div>
+                  </div>
+                  <div className="highlight-item">
+                    <span className="highlight-icon">💼</span>
+                    <div className="highlight-text">
+                      <strong>Experience</strong>
+                      <p>Full Stack Developer | 10+ Projects</p>
+                    </div>
+                  </div>
+                  <div className="highlight-item">
+                    <span className="highlight-icon">🚀</span>
+                    <div className="highlight-text">
+                      <strong>Skills</strong>
+                      <p>MERN Stack, JavaScript, React, Node.js</p>
+                    </div>
+                  </div>
+                  <div className="highlight-item">
+                    <span className="highlight-icon">🏆</span>
+                    <div className="highlight-text">
+                      <strong>Achievements</strong>
+                      <p>10+ Completed Projects</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="resume-actions">
+                  <button 
+                    onClick={() => {
+                      const link = document.createElement('a');
+                      link.href = '/resume.pdf.pdf';
+                      link.download = 'Md_Modassir_Resume.pdf';
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                    }}
+                    className="resume-download-btn magnetic"
+                  >
+                    <span className="btn-icon">⬇️</span>
+                    <span className="btn-text">Download Resume (PDF)</span>
+                    <span className="magnetic-area"></span>
+                  </button>
+                  
+                  <button 
+                    onClick={() => window.open('/resume.pdf.pdf', '_blank')}
+                    className="resume-view-btn magnetic"
+                  >
+                    <span className="btn-icon">👁️</span>
+                    <span className="btn-text">View Online</span>
+                    <span className="magnetic-area"></span>
+                  </button>
+                </div>
+              </div>
+              
+              <div className="resume-preview-footer">
+                <p>📧 faizimd57@gmail.com | 📱 +91 7033177333</p>
+                <p>💻 github.com/mdmodassir | 💼 linkedin.com/in/md-modassir</p>
+              </div>
+            </div>
+            
+            {/* Resume Features Grid */}
+            <div className="resume-features-grid">
+              <div className="resume-feature-card glass">
+                <div className="feature-icon">📊</div>
+                <h4>Technical Skills</h4>
+                <ul>
+                  <li>React.js & Next.js</li>
+                  <li>Node.js & Express</li>
+                  <li>MongoDB & SQL</li>
+                  <li>RESTful APIs</li>
+                  <li>Tailwind CSS</li>
+                </ul>
+              </div>
+              
+              <div className="resume-feature-card glass">
+                <div className="feature-icon">💼</div>
+                <h4>Professional Experience</h4>
+                <ul>
+                  <li>Full Stack Developer (Freelance)</li>
+                  <li>10+ Client Projects</li>
+                  <li>Team Collaboration</li>
+                  <li>Agile Methodology</li>
+                </ul>
+              </div>
+              
+              <div className="resume-feature-card glass">
+                <div className="feature-icon">📜</div>
+                <h4>Certifications</h4>
+                <ul>
+                  <li>MERN Stack Certification</li>
+                  <li>JavaScript Algorithms</li>
+                  <li>React Advanced Concepts</li>
+                  <li>Node.js API Development</li>
+                </ul>
+              </div>
+              
+              <div className="resume-feature-card glass">
+                <div className="feature-icon">🌐</div>
+                <h4>Languages</h4>
+                <ul>
+                  <li>English (Professional)</li>
+                  <li>Hindi (Native)</li>
+                  <li>Urdu (Conversational)</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ===== CONTACT SECTION - 3D INTERACTIVE ===== */}
       <section id="contact" className="contact-3d" ref={setRef('contact')}>
         <div className="contact-particles">
@@ -745,7 +955,7 @@ function App() {
         
         <div className="container">
           <div className="section-header-3d">
-            <div className="section-badge">05</div>
+            <div className="section-badge">06</div>
             <h2 className="section-title-3d">Let's Connect</h2>
             <div className="section-subtitle-3d">Ready to bring your ideas to life?</div>
           </div>
@@ -755,7 +965,7 @@ function App() {
               <div className="contact-sphere">
                 <div className="sphere-core-contact"></div>
                 {[
-                  { icon: '📧', type: 'Email', info: 'falzimd57@gmail.com' },
+                  { icon: '📧', type: 'Email', info: 'faizimd57@gmail.com' },
                   { icon: '📱', type: 'Phone', info: '+91 7033177333' },
                   { icon: '💼', type: 'LinkedIn', info: 'Md Modassir' },
                   { icon: '💻', type: 'GitHub', info: 'mdmodassir' },
@@ -900,7 +1110,7 @@ function App() {
               <div className="footer-nav-3d">
                 <div className="nav-group">
                   <h4>Explore</h4>
-                  {['Home', 'About', 'Skills', 'Education', 'Projects', 'Contact'].map((link) => (
+                  {['Home', 'About', 'Skills', 'Education', 'Projects', 'Resume', 'Contact'].map((link) => (
                     <button 
                       key={link} 
                       onClick={() => scrollToSection(link.toLowerCase())}
