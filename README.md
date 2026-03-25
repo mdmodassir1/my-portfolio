@@ -2,7 +2,7 @@
 
 A stunning, modern, and interactive portfolio website built with React.js featuring 3D animations, glass morphism effects, and a fully functional contact form with Node.js backend.
 
-![Portfolio Preview](https://via.placeholder.com/1200x600/667eea/ffffff?text=Md+Modassir+Portfolio)
+live - https://mdmodassir.netlify.app/
 
 ## ✨ Features
 
