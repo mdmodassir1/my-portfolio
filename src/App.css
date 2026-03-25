@@ -1,4 +1,4 @@
-/* ===== RESET AND BASE STYLES ===== */
+
 * {
   margin: 0;
   padding: 0;
@@ -20,6 +20,7 @@
   --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.15);
   --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   --gradient-accent: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-dark: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
 }
 
 body {
@@ -199,7 +200,6 @@ body {
   align-items: center;
 }
 
-/* Fixed Navigation Button Styles */
 .nav-link {
   background: none;
   border: none;
@@ -524,8 +524,7 @@ body {
   position: relative;
   width: 350px;
   height: 350px;
-  animation: float hold ease-in-out infinite;
-  background: (135deg, #667eea, #764ba2, #f093fb);
+  animation: float 6s ease-in-out infinite;
 }
 
 .home-profile-image {
@@ -550,32 +549,6 @@ body {
     0 0 80px rgba(255, 255, 255, 0.5),
     0 0 150px rgba(102, 126, 234, 0.6),
     inset 0 0 80px rgba(255, 255, 255, 0.3);
-}
-
-.profile-image-placeholder.home {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: var(--gradient);
-  color: white;
-  font-size: 3.5rem;
-  transition: all 0.5s ease;
-}
-
-.profile-image-placeholder.home:hover {
-  background: var(--gradient-accent);
-  transform: scale(1.02);
-}
-
-.profile-image-placeholder.home p {
-  font-size: 1.1rem;
-  margin-top: 1.2rem;
-  opacity: 0.9;
-  font-weight: 500;
-  text-align: center;
 }
 
 .home-profile-img {
@@ -779,10 +752,9 @@ body {
   position: relative;
   width: 389px;
   height: 398px;
-  animation: float hold ease-in-out infinite;
+  animation: float 6s ease-in-out infinite;
   transform-style: preserve-3d;
   perspective: 1000px;
-  background:(135deg, #667eea, #764ba2, #f093fb);
 }
 
 .about-profile-image {
@@ -808,33 +780,6 @@ body {
     0 30px 80px rgba(0, 0, 0, 0.25),
     0 0 60px rgba(102, 126, 234, 0.5),
     inset 0 0 50px rgba(255, 255, 255, 0.3);
-}
-
-.profile-image-placeholder.about {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: var(--gradient);
-  color: white;
-  font-size: 4rem;
-  transition: all 0.6s ease;
-  border-radius: 20px;
-}
-
-.profile-image-placeholder.about:hover {
-  background: var(--gradient-accent);
-  transform: scale(1.03);
-}
-
-.profile-image-placeholder.about p {
-  font-size: 1.1rem;
-  margin-top: 1.5rem;
-  opacity: 0.9;
-  font-weight: 500;
-  text-align: center;
 }
 
 .about-profile-img {
@@ -980,12 +925,26 @@ body {
   font-size: 0.9rem;
 }
 
-/* ===== SKILLS SECTION - 3D VISUALIZATION ===== */
+/* ===== ENHANCED SKILLS SECTION - PREMIUM 3D DESIGN ===== */
 .skills-3d {
   padding: 120px 0;
-  background: var(--background-alt);
+  background: var(--gradient-dark);
   position: relative;
   overflow: hidden;
+}
+
+.skills-3d::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, rgba(240, 147, 251, 0.1) 0%, transparent 50%);
+  pointer-events: none;
 }
 
 .skills-orbit {
@@ -993,9 +952,10 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 500px;
-  height: 500px;
-  animation: orbitRotate 20s linear infinite reverse;
+  width: 600px;
+  height: 600px;
+  animation: orbitRotate 25s linear infinite;
+  opacity: 0.4;
 }
 
 .orbit-tech {
@@ -1003,8 +963,9 @@ body {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 1.5rem;
-  animation: orbitPulse 4s ease-in-out infinite;
+  font-size: 2rem;
+  filter: drop-shadow(0 0 15px rgba(102, 126, 234, 0.6));
+  animation: orbitPulse 3s ease-in-out infinite;
   animation-delay: calc(0.5s * var(--i));
 }
 
@@ -1013,14 +974,28 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 4rem;
   align-items: center;
+  position: relative;
+  z-index: 2;
 }
 
+/* 3D Skills Sphere */
 .skills-sphere {
   position: relative;
-  width: 400px;
-  height: 400px;
+  width: 450px;
+  height: 450px;
   margin: 0 auto;
   perspective: 1000px;
+  transform-style: preserve-3d;
+  animation: floatSphere 8s ease-in-out infinite;
+}
+
+@keyframes floatSphere {
+  0%, 100% {
+    transform: translateY(0px) rotateX(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotateX(5deg);
+  }
 }
 
 .sphere-core {
@@ -1028,11 +1003,26 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 80px;
-  height: 80px;
-  background: var(--gradient);
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, #667eea, #764ba2);
   border-radius: 50%;
-  animation: pulse 2s ease-in-out infinite;
+  box-shadow: 
+    0 0 30px rgba(102, 126, 234, 0.8),
+    inset 0 0 30px rgba(255, 255, 255, 0.5);
+  animation: corePulse 3s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes corePulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 0 30px rgba(102, 126, 234, 0.8);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+    box-shadow: 0 0 60px rgba(102, 126, 234, 1);
+  }
 }
 
 .skill-orb {
@@ -1042,22 +1032,39 @@ body {
   transform: 
     translate(-50%, -50%)
     rotate(calc(60deg * var(--index)))
-    translateX(150px)
+    translateX(170px)
     rotate(calc(-60deg * var(--index)));
-  width: 60px;
-  height: 60px;
-  background: var(--color, var(--primary));
+  width: 75px;
+  height: 75px;
+  background: linear-gradient(135deg, var(--color), rgba(255, 255, 255, 0.8));
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  animation: orbitRotate 15s linear infinite;
+  animation: orbitRotate 12s linear infinite;
   animation-delay: calc(-2s * var(--index));
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  z-index: 2;
+}
+
+.skill-orb:hover {
+  transform: 
+    translate(-50%, -50%)
+    rotate(calc(60deg * var(--index)))
+    translateX(190px)
+    rotate(calc(-60deg * var(--index)))
+    scale(1.2);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
 }
 
 .orb-icon {
-  font-size: 1.2rem;
+  font-size: 1.8rem;
   z-index: 2;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 .orb-glow {
@@ -1066,11 +1073,12 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--color, var(--primary));
+  background: var(--color);
   border-radius: 50%;
-  filter: blur(10px);
+  filter: blur(15px);
   opacity: 0.6;
   animation: glowPulse 2s ease-in-out infinite;
+  z-index: -1;
 }
 
 @keyframes glowPulse {
@@ -1078,10 +1086,11 @@ body {
   50% { opacity: 0.8; transform: scale(1.1); }
 }
 
+/* Skills Details Section */
 .skills-details-3d {
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 2.5rem;
 }
 
 .skills-categories-3d {
@@ -1091,77 +1100,127 @@ body {
 
 .skill-category-3d {
   padding: 2rem;
-  border-radius: 20px;
-  transition: all 0.3s ease;
+  border-radius: 25px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.skill-category-3d::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.05), 
+    transparent);
+  transition: left 0.5s ease;
+}
+
+.skill-category-3d:hover::before {
+  left: 100%;
 }
 
 .skill-category-3d:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(102, 126, 234, 0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
 .category-header-3d {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  position: relative;
 }
 
 .category-icon {
-  font-size: 1.5rem;
+  font-size: 2rem;
+  animation: iconBounce 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 10px rgba(102, 126, 234, 0.5));
+}
+
+@keyframes iconBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
 }
 
 .category-header-3d h3 {
-  color: var(--text);
-  font-size: 1.3rem;
+  color: white;
+  font-size: 1.5rem;
   margin: 0;
+  background: linear-gradient(135deg, #fff, #a5b4fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
 }
 
 .skills-list-3d {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 1.5rem;
 }
 
 .skill-item-3d {
   animation: slideInRight 0.6s ease forwards;
   opacity: 0;
+  position: relative;
 }
 
 .skill-info-3d {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
 }
 
 .skill-name {
   font-weight: 600;
-  color: var(--text);
+  color: rgba(255, 255, 255, 0.9);
   font-size: 1rem;
+  letter-spacing: 0.5px;
 }
 
 .skill-percent {
   font-weight: 700;
-  color: var(--primary);
-  font-size: 0.9rem;
+  color: #667eea;
+  font-size: 1rem;
+  background: rgba(102, 126, 234, 0.2);
+  padding: 0.2rem 0.8rem;
+  border-radius: 20px;
+  backdrop-filter: blur(5px);
 }
 
 .skill-bar-3d {
   width: 100%;
-  height: 8px;
-  background: var(--border);
+  height: 10px;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   overflow: hidden;
   position: relative;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .skill-progress-3d {
   height: 100%;
-  background: var(--gradient);
+  background: linear-gradient(90deg, #667eea, #764ba2);
   border-radius: 10px;
   position: relative;
-  transition: width 1.5s ease-in-out;
+  transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
   transform-origin: left;
+  box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
 }
 
 .progress-sparkle {
@@ -1172,19 +1231,34 @@ body {
   height: 100%;
   background: linear-gradient(90deg, 
     transparent, 
-    rgba(255, 255, 255, 0.6), 
+    rgba(255, 255, 255, 0.4), 
     transparent);
   animation: shimmer 2s infinite;
 }
 
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Tools Section */
 .skills-tools-3d {
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
 .tools-header h3 {
-  color: var(--text);
+  color: white;
   margin-bottom: 1.5rem;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
+  display: inline-block;
+  background: linear-gradient(135deg, #fff, #a5b4fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
 }
 
 .tools-grid {
@@ -1195,22 +1269,30 @@ body {
 
 .tool-item {
   padding: 1rem 1.5rem;
-  border-radius: 10px;
+  border-radius: 15px;
   text-align: center;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
 }
 
 .tool-item:hover {
-  transform: translateY(-3px);
+  transform: translateY(-5px) scale(1.02);
+  background: rgba(102, 126, 234, 0.2);
+  border-color: rgba(102, 126, 234, 0.5);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
 }
 
 .tool-name {
   font-weight: 500;
-  color: var(--text);
+  color: rgba(255, 255, 255, 0.9);
   position: relative;
   z-index: 2;
+  font-size: 1rem;
 }
 
 .tool-glow {
@@ -1221,13 +1303,30 @@ body {
   height: 100%;
   background: linear-gradient(90deg, 
     transparent, 
-    rgba(102, 126, 234, 0.1), 
+    rgba(102, 126, 234, 0.3), 
     transparent);
   transition: left 0.5s ease;
 }
 
 .tool-item:hover .tool-glow {
   left: 100%;
+}
+
+/* Animation Delays for Skills */
+.skill-item-3d:nth-child(1) { animation-delay: 0.1s; }
+.skill-item-3d:nth-child(2) { animation-delay: 0.2s; }
+.skill-item-3d:nth-child(3) { animation-delay: 0.3s; }
+.skill-item-3d:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 /* ===== ENHANCED EDUCATION SECTION - 3D TIMELINE ===== */
@@ -2219,6 +2318,30 @@ body {
     grid-template-columns: 1fr;
   }
   
+  .skills-sphere {
+    width: 350px;
+    height: 350px;
+  }
+  
+  .skill-orb {
+    transform: 
+      translate(-50%, -50%)
+      rotate(calc(60deg * var(--index)))
+      translateX(130px)
+      rotate(calc(-60deg * var(--index)));
+    width: 60px;
+    height: 60px;
+  }
+  
+  .skill-orb:hover {
+    transform: 
+      translate(-50%, -50%)
+      rotate(calc(60deg * var(--index)))
+      translateX(140px)
+      rotate(calc(-60deg * var(--index)))
+      scale(1.15);
+  }
+  
   .home-profile-frame {
     width: 280px;
     height: 280px;
@@ -2323,6 +2446,51 @@ body {
     text-align: center;
   }
   
+  .skills-sphere {
+    width: 280px;
+    height: 280px;
+  }
+  
+  .skill-orb {
+    transform: 
+      translate(-50%, -50%)
+      rotate(calc(60deg * var(--index)))
+      translateX(100px)
+      rotate(calc(-60deg * var(--index)));
+    width: 50px;
+    height: 50px;
+  }
+  
+  .skill-orb:hover {
+    transform: 
+      translate(-50%, -50%)
+      rotate(calc(60deg * var(--index)))
+      translateX(110px)
+      rotate(calc(-60deg * var(--index)))
+      scale(1.1);
+  }
+  
+  .orb-icon {
+    font-size: 1.4rem;
+  }
+  
+  .sphere-core {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .category-header-3d h3 {
+    font-size: 1.3rem;
+  }
+  
+  .tools-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .skill-category-3d {
+    padding: 1.5rem;
+  }
+  
   .home-profile-frame {
     width: 240px;
     height: 240px;
@@ -2381,6 +2549,42 @@ body {
     align-items: center;
   }
   
+  .skills-sphere {
+    width: 240px;
+    height: 240px;
+  }
+  
+  .skill-orb {
+    transform: 
+      translate(-50%, -50%)
+      rotate(calc(60deg * var(--index)))
+      translateX(85px)
+      rotate(calc(-60deg * var(--index)));
+    width: 45px;
+    height: 45px;
+  }
+  
+  .orb-icon {
+    font-size: 1.2rem;
+  }
+  
+  .sphere-core {
+    width: 55px;
+    height: 55px;
+  }
+  
+  .category-header-3d h3 {
+    font-size: 1.1rem;
+  }
+  
+  .skill-name, .skill-percent {
+    font-size: 0.85rem;
+  }
+  
+  .tool-name {
+    font-size: 0.85rem;
+  }
+  
   .home-profile-frame {
     width: 200px;
     height: 200px;
@@ -2437,6 +2641,7 @@ html {
 .hero-3d {
   margin-top: 80px;
 }
+
 /* Contact Form Status Messages */
 .submit-message {
   padding: 1rem;
@@ -2474,8 +2679,8 @@ html {
   cursor: not-allowed;
   transform: none !important;
 }
-/* ===== RESUME SECTION - 3D STYLING ===== */
 
+/* ===== RESUME SECTION - 3D STYLING ===== */
 .resume-section-3d {
   position: relative;
   min-height: 100vh;
@@ -2515,7 +2720,7 @@ html {
   padding: 40px;
   position: relative;
   overflow: hidden;
-  animation: float 6s ease-in-out;
+  animation: float 6s ease-in-out ;
 }
 
 .resume-preview-card::before {
@@ -2530,6 +2735,15 @@ html {
   z-index: -1;
 }
 
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .resume-preview-header {
   text-align: center;
   margin-bottom: 30px;
@@ -2539,7 +2753,7 @@ html {
 .resume-icon {
   font-size: 4rem;
   margin-bottom: 15px;
-  animation: bounce 2s ease-in-out ;
+  animation: bounce 2s ease-in-out infinite;
 }
 
 .resume-preview-header h3 {
@@ -2584,7 +2798,7 @@ html {
 
 .highlight-icon {
   font-size: 2rem;
-  animation: pulse 2s ease-in-out ;
+  animation: pulse 2s ease-in-out infinite;
 }
 
 .highlight-text {
@@ -2732,7 +2946,7 @@ html {
 .feature-icon {
   font-size: 2.5rem;
   margin-bottom: 20px;
-  animation: float 3s ease-in-out ;
+  animation: float 3s ease-in-out infinite;
 }
 
 .resume-feature-card h4 {

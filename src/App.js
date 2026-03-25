@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
-// ADD YOUR PHOTO IMPORT HERE:
 import profilePhoto from './Gemini_Generated_Image_qhbbkuqhbbkuqhbb.png';
 
 function App() {
@@ -19,6 +18,54 @@ function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
 
+  // Projects data with links
+  const projectsData = [
+    {
+      title: 'E-Commerce Platform',
+      description: 'A full-stack e-commerce solution with user authentication, product management, shopping cart, and payment integration.',
+      image: '🛒',
+      technologies: ['React', 'Node.js', 'MongoDB', 'Express', 'JWT', 'Stripe API'],
+      features: ['User Authentication', 'Product Catalog', 'Shopping Cart', 'Payment Processing', 'Order Management'],
+      liveUrl: 'https://your-ecommerce-demo.com',
+      githubUrl: 'https://github.com/mdmodassir1/ecommerce-app',
+      gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      status: 'Completed'
+    },
+    {
+      title: 'Task Management App',
+      description: 'A productivity application with drag-and-drop functionality, real-time updates, and team collaboration features.',
+      image: '📋',
+      technologies: ['MERN Stack', 'Socket.io', 'Material UI', 'Context API'],
+      features: ['Drag & Drop', 'Real-time Sync', 'Team Collaboration', 'Progress Tracking', 'Notifications'],
+      liveUrl: 'https://your-taskmanager-demo.com',
+      githubUrl: 'https://github.com/mdmodassir/task-management-app',
+      gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+      status: 'Completed'
+    },
+    {
+      title: 'Weather Dashboard',
+      description: 'Real-time weather application with location-based forecasts, interactive charts, and severe weather alerts.',
+      image: '🌤️',
+      technologies: ['React', 'Chart.js', 'Weather API', 'Geolocation API'],
+      features: ['Live Data', 'Interactive Charts', 'Location Search', 'Weather Alerts', '5-day Forecast'],
+      liveUrl: 'https://your-weather-demo.com',
+      githubUrl: 'https://github.com/mdmodassir/weather-dashboard',
+      gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+      status: 'Completed'
+    },
+    {
+      title: 'Social Media App',
+      description: 'A modern social platform with real-time messaging, post sharing, and user interactions.',
+      image: '💬',
+      technologies: ['React Native', 'Firebase', 'Redux', 'Node.js'],
+      features: ['Real-time Chat', 'Post Sharing', 'Like & Comment', 'User Profiles', 'Push Notifications'],
+      liveUrl: 'https://your-social-demo.com',
+      githubUrl: 'https://github.com/mdmodassir/social-media-app',
+      gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+      status: 'In Progress'
+    }
+  ];
+
   // Loading simulation
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 2500);
@@ -34,98 +81,48 @@ function App() {
     }
   };
 
-  // Contact form submission handler - UPDATED WITH BETTER ERROR HANDLING
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setIsSubmitting(true);
-  setSubmitStatus(null);
+  // Contact form submission handler
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus(null);
 
-  // Basic validation
-  if (!formData.name || !formData.email || !formData.subject || !formData.message) {
-    setSubmitStatus({
-      type: 'error',
-      message: 'Please fill in all fields'
-    });
-    setIsSubmitting(false);
-    return;
-  }
+    try {
+      const response = await fetch('http://localhost:5000/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-  // Email validation
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(formData.email)) {
-    setSubmitStatus({
-      type: 'error',
-      message: 'Please enter a valid email address'
-    });
-    setIsSubmitting(false);
-    return;
-  }
+      const data = await response.json();
 
-  try {
-    console.log('📤 Sending form data:', formData); // Debug log
-
-    const response = await fetch('http://localhost:5000/api/contact', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    });
-
-    // Check if response is OK
-    if (!response.ok) {
-      throw new Error(`Server responded with status: ${response.status}`);
-    }
-
-    // Check if response is JSON
-    const contentType = response.headers.get('content-type');
-    if (!contentType || !contentType.includes('application/json')) {
-      throw new Error('Server returned non-JSON response');
-    }
-
-    const data = await response.json();
-
-    if (data.success) {
+      if (data.success) {
+        setSubmitStatus({
+          type: 'success',
+          message: 'Thank you! Your message has been sent successfully.'
+        });
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          subject: '',
+          message: ''
+        });
+      } else {
+        throw new Error(data.message);
+      }
+    } catch (error) {
+      console.error('Contact form error:', error);
       setSubmitStatus({
-        type: 'success',
-        message: 'Thank you! Your message has been sent successfully. I\'ll get back to you soon!'
+        type: 'error',
+        message: error.message || 'Something went wrong. Please try again.'
       });
-      
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
-      });
-    } else {
-      throw new Error(data.message || 'Failed to send message');
+    } finally {
+      setIsSubmitting(false);
     }
-    
-  } catch (error) {
-    console.error('❌ Contact form error:', error);
-    
-    // User-friendly error message
-    let errorMessage = 'Failed to send message. ';
-    
-    if (error.message.includes('Failed to fetch')) {
-      errorMessage += 'Cannot connect to server. Please make sure backend is running on port 5000.';
-    } else if (error.message.includes('non-JSON')) {
-      errorMessage += 'Server error. Please try again later.';
-    } else if (error.message.includes('status:')) {
-      errorMessage += 'Server is not responding properly.';
-    } else {
-      errorMessage += error.message || 'Please try again.';
-    }
-    
-    setSubmitStatus({
-      type: 'error',
-      message: errorMessage
-    });
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+  };
 
   // Intersection Observer for animations
   useEffect(() => {
@@ -170,7 +167,7 @@ const handleSubmit = async (e) => {
       {/* Animated Background */}
       <div className="animated-bg"></div>
 
-      {/* Navigation Bar - FIXED RESUME BUTTON */}
+      {/* Navigation Bar */}
       <nav className="navbar glass">
         <div className="container">
           <div className="nav-brand">
@@ -211,22 +208,13 @@ const handleSubmit = async (e) => {
             >
               Projects
             </button>
-            
-            {/* FIXED RESUME BUTTON - Page reload nahi hoga */}
             <button 
               className="resume-nav-btn"
-              onClick={(e) => {
-                e.preventDefault();  // Page reload roktahai
-                e.stopPropagation(); // Event bubbling rokta hai
-                window.open('/resume.pdf.pdf', '_blank');
-                return false;        // Extra safety
-              }}
-              type="button"
+              onClick={() => window.open('/resume.pdf.pdf', '_blank')}
             >
               <span className="btn-text">📄 Resume</span>
               <span className="btn-icon">⬇️</span>
             </button>
-            
             <button 
               className={activeSection === 'contact' ? 'nav-link active' : 'nav-link'} 
               onClick={() => scrollToSection('contact')}
@@ -317,7 +305,6 @@ const handleSubmit = async (e) => {
                 <div className="home-profile-container">
                   <div className="home-profile-frame">
                     <div className="home-profile-image">
-                      {/* UNCOMMENT AND USE THIS FOR YOUR ACTUAL PHOTO: */}
                       <img src={profilePhoto} alt="Md Modassir" className="home-profile-img" />
                     </div>
                     <div className="home-profile-glow"></div>
@@ -383,7 +370,6 @@ const handleSubmit = async (e) => {
               <div className="about-profile-container">
                 <div className="about-profile-frame">
                   <div className="about-profile-image">
-                    {/* UNCOMMENT AND USE THIS FOR YOUR ACTUAL PHOTO: */}
                     <img src={profilePhoto} alt="Md Modassir" className="about-profile-img" />
                   </div>
                   <div className="about-profile-glow"></div>
@@ -681,7 +667,7 @@ const handleSubmit = async (e) => {
         </div>
       </section>
 
-      {/* ===== PROJECTS SECTION - 3D SHOWCASE ===== */}
+      {/* ===== PROJECTS SECTION - 3D SHOWCASE WITH LINKS ===== */}
       <section id="projects" className="projects-3d" ref={setRef('projects')}>
         <div className="projects-orbit">
           {[...Array(6)].map((_, i) => (
@@ -699,52 +685,7 @@ const handleSubmit = async (e) => {
           </div>
           
           <div className="projects-showcase-3d">
-            {[
-              {
-                title: 'E-Commerce Platform',
-                description: 'A full-stack e-commerce solution with user authentication, product management, shopping cart, and payment integration.',
-                image: '🛒',
-                technologies: ['React', 'Node.js', 'MongoDB', 'Express', 'JWT', 'Stripe API'],
-                features: ['User Authentication', 'Product Catalog', 'Shopping Cart', 'Payment Processing', 'Order Management'],
-                liveUrl: '#',
-                githubUrl: '#',
-                gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                status: 'Completed'
-              },
-              {
-                title: 'Task Management App',
-                description: 'A productivity application with drag-and-drop functionality, real-time updates, and team collaboration features.',
-                image: '📋',
-                technologies: ['MERN Stack', 'Socket.io', 'Material UI', 'Context API'],
-                features: ['Drag & Drop', 'Real-time Sync', 'Team Collaboration', 'Progress Tracking', 'Notifications'],
-                liveUrl: '#',
-                githubUrl: '#',
-                gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-                status: 'Completed'
-              },
-              {
-                title: 'Weather Dashboard',
-                description: 'Real-time weather application with location-based forecasts, interactive charts, and severe weather alerts.',
-                image: '🌤️',
-                technologies: ['React', 'Chart.js', 'Weather API', 'Geolocation API'],
-                features: ['Live Data', 'Interactive Charts', 'Location Search', 'Weather Alerts', '5-day Forecast'],
-                liveUrl: '#',
-                githubUrl: '#',
-                gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-                status: 'Completed'
-              },
-              {
-                title: 'Social Media App',
-                description: 'A modern social platform with real-time messaging, post sharing, and user interactions.',
-                image: '💬',
-                technologies: ['React Native', 'Firebase', 'Redux', 'Node.js'],
-                features: ['Real-time Chat', 'Post Sharing', 'Like & Comment', 'User Profiles', 'Push Notifications'],
-                liveUrl: '#',
-                githubUrl: '#',
-                gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
-                status: 'In Progress'
-              }
-            ].map((project, index) => (
+            {projectsData.map((project, index) => (
               <div key={project.title} className="project-card-3d">
                 <div className="project-header-3d" style={{background: project.gradient}}>
                   <div className="project-image">{project.image}</div>
@@ -779,12 +720,18 @@ const handleSubmit = async (e) => {
                   </div>
                   
                   <div className="project-actions-3d">
-                    <button className="project-btn-3d live-demo magnetic">
+                    <button 
+                      className="project-btn-3d live-demo magnetic"
+                      onClick={() => window.open(project.liveUrl, '_blank')}
+                    >
                       <span className="btn-text">Live Demo</span>
                       <span className="btn-icon">🌐</span>
                       <span className="magnetic-area"></span>
                     </button>
-                    <button className="project-btn-3d github magnetic">
+                    <button 
+                      className="project-btn-3d github magnetic"
+                      onClick={() => window.open(project.githubUrl, '_blank')}
+                    >
                       <span className="btn-text">GitHub</span>
                       <span className="btn-icon">💻</span>
                       <span className="magnetic-area"></span>
@@ -857,9 +804,11 @@ const handleSubmit = async (e) => {
                   </div>
                 </div>
                 
+                
                 <div className="resume-actions">
                   <button 
                     onClick={() => {
+                      // Download functionality
                       const link = document.createElement('a');
                       link.href = '/resume.pdf.pdf';
                       link.download = 'Md_Modassir_Resume.pdf';
@@ -886,8 +835,8 @@ const handleSubmit = async (e) => {
               </div>
               
               <div className="resume-preview-footer">
-                <p>📧 faizimd57@gmail.com | 📱 +91 7033177333</p>
-                <p>💻 github.com/mdmodassir | 💼 linkedin.com/in/md-modassir</p>
+                <p>📧 mdmodassir259@gmail.com | 📱 +91 7033177333</p>
+                <p>💻 https://github.com/mdmodassir1 | 💼 https://www.linkedin.com/in/md-modassir-9316702bb/</p>
               </div>
             </div>
             
@@ -965,10 +914,10 @@ const handleSubmit = async (e) => {
               <div className="contact-sphere">
                 <div className="sphere-core-contact"></div>
                 {[
-                  { icon: '📧', type: 'Email', info: 'faizimd57@gmail.com' },
+                  { icon: '📧', type: 'Email', info: 'mdmodassir259@gmail.com' },
                   { icon: '📱', type: 'Phone', info: '+91 7033177333' },
-                  { icon: '💼', type: 'LinkedIn', info: 'Md Modassir' },
-                  { icon: '💻', type: 'GitHub', info: 'mdmodassir' },
+                  { icon: '💼', type: 'LinkedIn', info: 'https://www.linkedin.com/in/md-modassir-9316702bb/' },
+                  { icon: '💻', type: 'GitHub', info: 'https://github.com/mdmodassir1' },
                  ].map((contact, index) => (
                   <div 
                     key={contact.type}
@@ -1074,7 +1023,7 @@ const handleSubmit = async (e) => {
           <div className="contact-social-3d">
             <div className="social-links-3d">
               {[
-                { name: '💻 GitHub', url: 'https://github.com/mdmodassir' },
+                { name: '💻 GitHub', url: 'https://github.com/mdmodassir1' },
                 { name: '💼 LinkedIn', url: 'https://www.linkedin.com/in/md-modassir-9316702bb/' },
                { name: '📷 Instagram', url: 'https://www.instagram.com/itz_modo/?__pwa=1' }
               ].map((social, index) => (
