@@ -99,7 +99,7 @@ npm run dev
 👨‍💻 Author
 ###  Md Modassir
 
-📧 Email: faizimd57@gmail.com
+📧 Email: mdmodassir259@gmail.com
 
 💼 LinkedIn: Md Modassir
 
