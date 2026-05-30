@@ -26,7 +26,7 @@ function App() {
       image: '🛒',
       technologies: ['React', 'Node.js', 'MongoDB', 'Express', 'JWT', 'Stripe API'],
       features: ['User Authentication', 'Product Catalog', 'Shopping Cart', 'Payment Processing', 'Order Management'],
-      liveUrl: 'https://your-ecommerce-demo.com',
+      liveUrl: 'https://ecommerce-app-1-g98n.onrender.com/',
       githubUrl: 'https://github.com/mdmodassir1/ecommerce-app',
       gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
       status: 'Completed'
@@ -37,8 +37,8 @@ function App() {
       image: '📋',
       technologies: ['MERN Stack', 'Socket.io', 'Material UI', 'Context API'],
       features: ['Drag & Drop', 'Real-time Sync', 'Team Collaboration', 'Progress Tracking', 'Notifications'],
-      liveUrl: 'https://your-taskmanager-demo.com',
-      githubUrl: 'https://github.com/mdmodassir/task-management-app',
+      liveUrl: 'https://task-management-app-1-6gbr.onrender.com/',
+      githubUrl: 'https://github.com/mdmodassir1/task-management-app',
       gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
       status: 'Completed'
     },
@@ -54,13 +54,13 @@ function App() {
       status: 'Completed'
     },
     {
-      title: 'Social Media App',
+      title: 'Social Media Platform',
       description: 'A modern social platform with real-time messaging, post sharing, and user interactions.',
       image: '💬',
-      technologies: ['React Native', 'Firebase', 'Redux', 'Node.js'],
+      technologies: ['React.js', 'Firebase', 'Redux', 'Node.js'],
       features: ['Real-time Chat', 'Post Sharing', 'Like & Comment', 'User Profiles', 'Push Notifications'],
-      liveUrl: 'https://your-social-demo.com',
-      githubUrl: 'https://github.com/mdmodassir/social-media-app',
+      liveUrl: 'https://socialsphere-fdzq.onrender.com/',
+      githubUrl: 'https://github.com/mdmodassir1/socialsphere',
       gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
       status: 'In Progress'
     }
@@ -594,8 +594,8 @@ function App() {
                 icon: '🎓',
                 title: 'B.Tech Computer Science',
                 institution: 'Global Group of Institutes, Amritsar',
-                status: 'In Progress',
-                description: 'Pursuing degree in Computer Science with focus on software engineering, algorithms, and modern web technologies.',
+                status: 'Completed',
+                description: 'completed Bachelor degree in Computer Science & Engineering with focus on software development, algorithms, and modern web technologies.',
                 achievements: ['Data Structures', 'Algorithms', 'Web Development', 'Database Systems'],
                 gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
               },
@@ -1074,7 +1074,7 @@ function App() {
             
             <div className="footer-bottom-3d">
               <div className="footer-copyright">
-                <p>&copy; 2024 Md Modassir. All rights reserved.</p>
+                <p>&copy; 2026 Md Modassir. All rights reserved.</p>
                 <p>Built with ❤️ using React & Node.js</p>
               </div>
               

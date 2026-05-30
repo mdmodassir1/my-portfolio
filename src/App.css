@@ -524,7 +524,7 @@ body {
   position: relative;
   width: 350px;
   height: 350px;
-  animation: float 6s ease-in-out infinite;
+  /* animation: float 6s ease-in-out infinite; */
 }
 
 .home-profile-image {
@@ -752,7 +752,7 @@ body {
   position: relative;
   width: 389px;
   height: 398px;
-  animation: float 6s ease-in-out infinite;
+  /* animation: float 6s ease-in-out infinite; */
   transform-style: preserve-3d;
   perspective: 1000px;
 }
